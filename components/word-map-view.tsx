@@ -12,6 +12,8 @@ export function WordMapView() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const graphRef = useRef<{
+    centerAt?: (x?: number, y?: number, ms?: number) => void;
+    zoom?: (scale?: number, ms?: number) => void;
     zoomToFit?: (
       ms?: number,
       padding?: number,

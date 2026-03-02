@@ -1,6 +1,6 @@
 import frequencyList from "../data/frequency-list.json";
 
-/** Set of top 5000 most common English words (Google Trillion Word Corpus) */
+/** Set of top 15000 most common English words */
 export const TOP_WORDS = new Set<string>(
   frequencyList.map((w) => w.toLowerCase())
 );

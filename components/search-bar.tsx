@@ -7,6 +7,8 @@ export interface SearchBarProps {
   nodes: GraphNode[];
   onSearch: (node: GraphNode | null) => void;
   graphRef: React.MutableRefObject<{
+    centerAt?: (x?: number, y?: number, ms?: number) => void;
+    zoom?: (scale?: number, ms?: number) => void;
     zoomToFit?: (
       ms?: number,
       padding?: number,
@@ -49,7 +51,17 @@ export function SearchBar({
       setQuery(node.id);
       setShowSuggestions(false);
       onSearch(node);
-      graphRef.current?.zoomToFit?.(500, 80, (n) => n.id === node.id);
+      const ms = 500;
+      if (
+        typeof node.x === "number" &&
+        typeof node.y === "number" &&
+        graphRef.current
+      ) {
+        graphRef.current.centerAt?.(node.x, node.y, ms);
+        graphRef.current.zoom?.(2.5, ms);
+      } else {
+        graphRef.current?.zoomToFit?.(ms, 60, (n) => n.id === node.id);
+      }
     },
     [onSearch, graphRef],
   );
