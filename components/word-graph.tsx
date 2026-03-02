@@ -5,6 +5,8 @@ import dynamic from "next/dynamic";
 import type { GraphNode, GraphLink } from "@/types/graph";
 
 const NODE_REL_SIZE = 4;
+/** Scale UMAP coordinates (typically -10..10) to spread nodes across the viewport */
+const LAYOUT_SCALE = 400;
 
 const ForceGraph2D = dynamic(() => import("react-force-graph-2d"), {
   ssr: false,
@@ -75,14 +77,17 @@ export function WordGraph({
         links: graphData.links,
       };
     }
+    const scale = (v: number | undefined) => (v ?? 0) * LAYOUT_SCALE;
     return {
       nodes: graphData.nodes.map((n) => ({
         ...n,
-        fx: n.x,
-        fy: n.y,
+        x: scale(n.x),
+        y: scale(n.y),
+        fx: scale(n.x),
+        fy: scale(n.y),
         val: 3 + Math.min((linkCountByNode.get(n.id) ?? 0) * 0.5, 8),
-        __fixedX: n.x,
-        __fixedY: n.y,
+        __fixedX: scale(n.x),
+        __fixedY: scale(n.y),
       })),
       links: graphData.links,
     };
